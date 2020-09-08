@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title><%= pageData.title %></title>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+  <meta name="keywords" content="">
+  <meta name="description" content="<%= pageData.description %>">
+  <meta name="renderer" content="webkit">
+  <meta name="robots" content="index, follow">
+  <meta name="format-detection" content="telephone=no">
+  <script src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+  <script src="/third-libs/vue.js"></script>
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+  <link rel="stylesheet" href="/third-libs/element-ui@2.13.2.css">
+  <link rel="stylesheet" href="/third-libs/vant@2.9.min.css">
+  <!-- 引入组件库 -->
+  <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+  <script src="/third-libs/element-ui@2.13.2.js"></script>
+  <script src="/third-libs/vant@2.9.min.js"></script>
+  <link rel="stylesheet" href="/third-libs/animate.min.css">
+  <!--引入模板-->
+  <script src="/engine_libs/h5-long/page-engine.umd.js"></script>
+  <script src="//static-mumway.oss-cn-zhangjiakou.aliyuncs.com/cdn/LandingPage/flexable.js"></script>
+
+  <link rel="stylesheet" href="/engine_libs/h5-long/page-engine.css">
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body,
+    #app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #app {
+      overflow-x: hidden;
+    }
+
+    .minwidth {
+      min-width: 50%;
+    }
+  </style>
+  <script>
+    window._pageData = <%- JSON.stringify(pageData) %>;
+
+    let { type, id } = window._pageData.count
+
+    if (type&&id){
+      if (+type === 1) {
+        // 百度统计
+        window._agl = window._agl || [];
+        (function () {
+          _agl.push(
+            ['production', id]
+          );
+          (function () {
+            var agl = document.createElement('script');
+            agl.type = 'text/javascript';
+            agl.async = true;
+            agl.src = 'https://fxgate.baidu.com/angelia/fcagl.js?production=' + id;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(agl, s);
+          })();
+        })();
+
+      } else if(+type===2) { 
+        // 友盟统计
+        //声明_czc对象:
+        window._czc = window._czc || [];
+      //绑定siteid
+      (function(){
+        _czc.push(["_setAccount", id]);
+        var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape(`%3Cspan id='cnzz_stat_icon_${id}'%3E%3C/span%3E%3Cscript src='` + cnzz_protocol + `s4.cnzz.com/z_stat.php%3Fid%3D${id}' type='text/javascript'%3E%3C/script%3E`));
+        document.getElementById(`cnzz_stat_icon_${id}`).style.display = "none"; // 隐藏统计小图标
+      })()
+
+    }else if(+type===3){
+        //抖音统计
+        (function (r, d, s, l) {
+          var meteor = r.meteor = r.meteor || []; meteor.methods = ["track", "off", "on"]; meteor.factory = function (method) {
+            return function () {
+              var args = Array.prototype.slice.call(arguments); args.unshift(method); meteor.push(args); return meteor
+            }
+          }; for (var i = 0; i < meteor.methods.length; i++) {
+            var key = meteor.methods[i]; meteor[key] = meteor.factory(key)
+          } meteor.load = function () {
+            var js, fjs = d.getElementsByTagName(s)[0]; js = d.createElement(s);
+            js.src = "https://analytics.snssdk.com/meteor.js/v1/" + l + "/sdk"; fjs.parentNode.insertBefore(js, fjs)
+          }; meteor.load(); if (meteor.invoked) { return }
+          meteor.invoked = true; meteor.track("pageview")
+        })(window, document, "script", id);
+      }
+
+      }
+
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <engine-h5-long />
+  </div>
+  <script>
+    new Vue({
+      el: "#app"
+    })
+  </script>
+
+  <script>
+    eval(window._pageData.script);
+  </script>
+
+</body>
+
+</html>
